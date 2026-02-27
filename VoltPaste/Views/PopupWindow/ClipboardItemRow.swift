@@ -3,6 +3,7 @@ import SwiftUI
 struct ClipboardItemRow: View {
     let item: ClipboardItem
     let isHovered: Bool
+    var isSelected: Bool = false
     let onSelect: () -> Void
     let onDelete: () -> Void
     let onTogglePin: () -> Void
@@ -21,7 +22,7 @@ struct ClipboardItemRow: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(isHovered ? Color.accentColor.opacity(0.1) : Color.clear)
+            .background(isSelected ? Color.accentColor.opacity(0.2) : isHovered ? Color.accentColor.opacity(0.1) : Color.clear)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -75,7 +76,7 @@ struct ClipboardItemRow: View {
                 .font(.system(size: 11))
                 .foregroundStyle(.tertiary)
 
-            if isHovered || item.isPinned {
+            if isHovered || isSelected || item.isPinned {
                 Button(action: onTogglePin) {
                     Image(systemName: item.isPinned ? "pin.fill" : "pin")
                         .font(.system(size: 12))
@@ -85,7 +86,7 @@ struct ClipboardItemRow: View {
                 .help(item.isPinned ? "Unpin" : "Pin")
             }
 
-            if isHovered {
+            if isHovered || isSelected {
                 Button(action: onDelete) {
                     Image(systemName: "trash")
                         .font(.system(size: 12))
