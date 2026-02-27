@@ -13,7 +13,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupStatusItem()
         setupHotKeys()
-        checkAccessibilityPermission()
     }
 
     func setupClipboardMonitor(with container: ModelContainer) {
@@ -65,8 +64,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.hidePopup()
                 PasteService.paste(item: item, asPlainText: asPlainText)
             },
-            onSettingsTapped: {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            onDismiss: { [weak self] in
+                self?.hidePopup()
             }
         )
         .modelContainer(container)
@@ -110,11 +109,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         hotKeyManager.register(paste: pasteCombo, pasteOriginal: pasteOriginalCombo)
     }
 
-    private func checkAccessibilityPermission() {
-        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as String: true] as CFDictionary
-        let trusted = AXIsProcessTrustedWithOptions(options)
-        if !trusted {
-            print("VoltPaste needs Accessibility permission for global hotkeys.")
-        }
+    static var isAccessibilityGranted: Bool {
+        AXIsProcessTrusted()
+    }
+
+    static func promptAccessibilityPermission() {
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        AXIsProcessTrustedWithOptions(options)
     }
 }

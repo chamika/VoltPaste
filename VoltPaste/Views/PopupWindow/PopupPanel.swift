@@ -2,6 +2,9 @@ import AppKit
 import SwiftUI
 
 final class PopupPanel: NSPanel {
+    private var clickOutsideMonitor: Any?
+    private var escapeMonitor: Any?
+
     init(contentRect: NSRect) {
         super.init(
             contentRect: contentRect,
@@ -23,11 +26,6 @@ final class PopupPanel: NSPanel {
 
     override var canBecomeKey: Bool { true }
 
-    override func resignKey() {
-        super.resignKey()
-        close()
-    }
-
     func showCentered() {
         guard let screen = NSScreen.main else { return }
         let screenFrame = screen.visibleFrame
@@ -36,6 +34,43 @@ final class PopupPanel: NSPanel {
         let y = screenFrame.origin.y + (screenFrame.height - panelSize.height) / 2 + 100
         self.setFrameOrigin(NSPoint(x: x, y: y))
         self.makeKeyAndOrderFront(nil)
+        startMonitoringEvents()
+    }
+
+    override func close() {
+        stopMonitoringEvents()
+        super.close()
+    }
+
+    private func startMonitoringEvents() {
+        // Close when clicking outside the panel
+        clickOutsideMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
+            self?.close()
+        }
+
+        // Close on Escape key
+        escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.keyCode == 53 { // Escape
+                self?.close()
+                return nil
+            }
+            return event
+        }
+    }
+
+    private func stopMonitoringEvents() {
+        if let monitor = clickOutsideMonitor {
+            NSEvent.removeMonitor(monitor)
+            clickOutsideMonitor = nil
+        }
+        if let monitor = escapeMonitor {
+            NSEvent.removeMonitor(monitor)
+            escapeMonitor = nil
+        }
+    }
+
+    deinit {
+        stopMonitoringEvents()
     }
 }
 

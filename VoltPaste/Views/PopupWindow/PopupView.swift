@@ -8,8 +8,9 @@ struct PopupView: View {
     @State private var selectedType: ContentType?
     @State private var hoveredItemID: UUID?
 
+    @Environment(\.openSettings) private var openSettings
     var onItemSelected: ((ClipboardItem, Bool) -> Void)?
-    var onSettingsTapped: (() -> Void)?
+    var onDismiss: (() -> Void)?
 
     private var filteredItems: [ClipboardItem] {
         var items = allItems
@@ -110,7 +111,9 @@ struct PopupView: View {
     private var bottomBar: some View {
         HStack {
             Button {
-                onSettingsTapped?()
+                onDismiss?()
+                NSApp.activate(ignoringOtherApps: true)
+                openSettings()
             } label: {
                 Image(systemName: "gearshape")
                     .font(.system(size: 14))

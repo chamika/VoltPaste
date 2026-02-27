@@ -29,15 +29,24 @@ struct ShortcutSettingsView: View {
                 }
             }
 
-            Section {
-                Text("Global shortcuts require Accessibility permission in System Settings > Privacy & Security > Accessibility.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Button("Open Accessibility Settings") {
-                    NSWorkspace.shared.open(
-                        URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
-                    )
+            Section("Accessibility Permission") {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Global shortcuts require Accessibility permission.")
+                            .font(.callout)
+                        Text("System Settings > Privacy & Security > Accessibility")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if AppDelegate.isAccessibilityGranted {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    } else {
+                        Button("Grant Permission") {
+                            AppDelegate.promptAccessibilityPermission()
+                        }
+                    }
                 }
             }
         }
