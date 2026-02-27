@@ -1,18 +1,13 @@
-//
-//  VoltPasteApp.swift
-//  VoltPaste
-//
-//  Created by Chamika Weerasinghe on 27/02/2026.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
 struct VoltPasteApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            ClipboardItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -24,9 +19,16 @@ struct VoltPasteApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        Settings {
+            SettingsView()
+                .modelContainer(sharedModelContainer)
         }
-        .modelContainer(sharedModelContainer)
+    }
+
+    init() {
+        // Delay setup to after app delegate is ready
+        DispatchQueue.main.async { [self] in
+            appDelegate.setupClipboardMonitor(with: sharedModelContainer)
+        }
     }
 }
