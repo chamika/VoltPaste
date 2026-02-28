@@ -8,6 +8,8 @@ struct PopupView: View {
     @State private var selectedType: ContentType?
     @State private var hoveredItemID: UUID?
     @State private var selectedIndex: Int = 0
+    @State private var selectionFromKeyboard = false
+    @FocusState private var isSearchFocused: Bool
 
     @Environment(\.openSettings) private var openSettings
     var onItemSelected: ((ClipboardItem, Bool) -> Void)?
@@ -61,7 +63,10 @@ struct PopupView: View {
         .onChange(of: selectedType) {
             selectedIndex = 0
         }
-        .onAppear { installArrowKeyMonitor() }
+        .onAppear {
+            isSearchFocused = true
+            installArrowKeyMonitor()
+        }
         .onDisappear { removeArrowKeyMonitor() }
     }
 
@@ -105,6 +110,7 @@ struct PopupView: View {
     private func moveSelection(by offset: Int) {
         guard !filteredItems.isEmpty else { return }
         let newIndex = selectedIndex + offset
+        selectionFromKeyboard = true
         selectedIndex = max(0, min(newIndex, filteredItems.count - 1))
     }
 
@@ -121,6 +127,7 @@ struct PopupView: View {
             TextField("Search clipboard history...", text: $searchText)
                 .textFieldStyle(.plain)
                 .font(.system(size: 14))
+                .focused($isSearchFocused)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -182,7 +189,11 @@ struct PopupView: View {
                         .padding(.vertical, 4)
                     }
                     .onChange(of: selectedIndex) {
-                        guard selectedIndex < filteredItems.count else { return }
+                        guard selectionFromKeyboard, selectedIndex < filteredItems.count else {
+                            selectionFromKeyboard = false
+                            return
+                        }
+                        selectionFromKeyboard = false
                         withAnimation(.easeInOut(duration: 0.15)) {
                             proxy.scrollTo(filteredItems[selectedIndex].id, anchor: .center)
                         }
