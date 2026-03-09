@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		707CD34D2F5F1A1500EFA191 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 707CD34C2F5F1A1500EFA191 /* README.md */; };
+		707CD34F2F5F1AA800EFA191 /* AGENTS.md in Resources */ = {isa = PBXBuildFile; fileRef = 707CD34E2F5F1AA800EFA191 /* AGENTS.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		70197D772F51924C00F87D55 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +32,8 @@
 		70197D672F51924B00F87D55 /* VoltPaste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoltPaste.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70197D762F51924C00F87D55 /* VoltPasteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltPasteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		70197D802F51924C00F87D55 /* VoltPasteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltPasteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		707CD34C2F5F1A1500EFA191 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		707CD34E2F5F1AA800EFA191 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +82,8 @@
 		70197D5E2F51924B00F87D55 = {
 			isa = PBXGroup;
 			children = (
+				707CD34C2F5F1A1500EFA191 /* README.md */,
+				707CD34E2F5F1AA800EFA191 /* AGENTS.md */,
 				70197D692F51924B00F87D55 /* VoltPaste */,
 				70197D792F51924C00F87D55 /* VoltPasteTests */,
 				70197D832F51924C00F87D55 /* VoltPasteUITests */,
@@ -212,6 +221,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				707CD34D2F5F1A1500EFA191 /* README.md in Resources */,
+				707CD34F2F5F1AA800EFA191 /* AGENTS.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
