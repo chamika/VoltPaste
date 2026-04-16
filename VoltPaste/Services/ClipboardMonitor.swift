@@ -81,7 +81,7 @@ final class ClipboardMonitor {
         let unpinnedPredicate = #Predicate<ClipboardItem> { item in
             item.isPinned == false
         }
-        var descriptor = FetchDescriptor<ClipboardItem>(
+        let descriptor = FetchDescriptor<ClipboardItem>(
             predicate: unpinnedPredicate,
             sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
         )
